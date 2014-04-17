@@ -1,4 +1,4 @@
-setwd("~/Documents/datascience SG/MusingsOfKaggler/RCode/data")
+#setwd("myDirectory")
 source("../baseFunctions.R")
 trainData<-read.csv("train.csv")
 
