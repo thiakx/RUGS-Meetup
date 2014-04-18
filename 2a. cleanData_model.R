@@ -1,25 +1,8 @@
-setwd("~/Documents/datascience SG/MusingsOfKaggler/scf_RCode/data")
+
 source("../baseFunctions_model.R")
 
-trainData<-read.csv("train.csv")
-testData<-read.csv("test.csv")
-
-#classify by cities based on lat long
-trainData$longitude<-trunc(trainData$longitude)
-trainData$city<-""
-trainData$city[trainData$longitude=="-77"]<-"richmond"
-trainData$city[trainData$longitude=="-72"]<-"new_haven"
-trainData$city[trainData$longitude=="-87"]<-"chicargo"
-trainData$city[trainData$longitude=="-122"]<-"oakland"
-trainData$city<-as.factor(trainData$city)
-
-testData$longitude<-trunc(testData$longitude)
-testData$city<-""
-testData$city[testData$longitude=="-77"]<-"richmond"
-testData$city[testData$longitude=="-72"]<-"new_haven"
-testData$city[testData$longitude=="-87"]<-"chicargo"
-testData$city[testData$longitude=="-122"]<-"oakland"
-testData$city<-as.factor(testData$city)
+trainData<-read.csv("train_wHex.csv")
+testData<-read.csv("test_wHex.csv")
 
 trainData2<-trainData[,!(names(trainData) %in% c("latitude","longitude"))]
 
@@ -103,13 +86,13 @@ trainDataModChi<-data.frame(trainDataModChi)
 #log view (it has large variation)
 trainDataMod$num_views<-log(trainDataMod$num_views+1)
 
-#relevel test data to top tags and source and remove those test data with non top tags& source first
+#relevel test data to match train data tags, source. All NAs will be estimated using median in modeling
 testDataMod$tag_type<-factor(testDataMod$tag_type,levels=levels(trainDataMod$tag_type))
 testDataMod$source<-factor(testDataMod$source,levels=levels(trainDataMod$source))
 testDataMod<-testDataMod[!is.na(testDataMod$tag_type),]
 testDataMod<-testDataMod[!is.na(testDataMod$source),]
 
-#relevel test data to top tags and source and remove those test data with non top tags& source first
+
 testDataModChi$tag_type<-factor(testDataModChi$tag_type,levels=levels(trainDataModChi$tag_type))
 testDataModChi$source<-factor(testDataModChi$source,levels=levels(trainDataModChi$source))
 testDataModChi<-testDataModChi[!is.na(testDataModChi$tag_type),]

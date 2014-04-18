@@ -1,5 +1,4 @@
-#45min on mac
-setwd("~/Documents/datascience SG/MusingsOfKaggler/scf_RCode/data")
+#30min on mac
 source("../baseFunctions_model.R")
 
 #load cleaned data
@@ -17,6 +16,13 @@ library(parallel)
 
 coreNumber<-max(detectCores()-1,1)
 registerDoMC(coreNumber)
+
+#only consider local moran and hex average if count of hex >30
+trainDataMod$LM_avgView[trainDataMod$count<30]<-NA
+trainDataMod$LM_avgComment[trainDataMod$count<30]<-NA
+trainDataMod$LM_avgVote[trainDataMod$count<30]<-NA
+trainDataMod<-na.omit(trainDataMod)
+testDataMod<-na.omit(testDataMod)
 
 set.seed(2291033)
 result<-rfModel(trainDataMod,testDataMod,1500,coreNumber)
@@ -36,9 +42,8 @@ tagSummary<-trainData2[,list(num_views=median(num_views),num_votes=median(num_vo
                               count=length(num_views)),by="city"][order(-count)]
 testData2<-testData2[!(testData2$id %in% result$id),]
 result2<-merge(testData2,tagSummary,by=c("city"))
-
-result2$count<-NULL
+result2<-result2[,c("id","num_views","num_votes","num_comments","city","tag_type","source")]
 
 resultFinal<-rbind(result,result2)
 
-write.table(resultFinal[1:4], file = "sub24_rfCityMedian_cityCombined_rExtreme_RAPi_edit.csv", row.names = FALSE, sep=",")
+write.csv(resultFinal[1:4], file = "randomForest_sub.csv", row.names = FALSE)

@@ -1,6 +1,7 @@
-#setwd("myDirectory")
-source("../baseFunctions.R")
+
+source("../baseFunctions_map.R")
 trainData<-read.csv("train.csv")
+testData<-read.csv("test.csv")
 
 #classify by cities based on lat long
 trainData$longitudeCut<-trunc(trainData$longitude)
@@ -10,13 +11,23 @@ trainData$city[trainData$longitudeCut=="-72"]<-"new_haven"
 trainData$city[trainData$longitudeCut=="-87"]<-"chicargo"
 trainData$city[trainData$longitudeCut=="-122"]<-"oakland"
 trainData$city<-as.factor(trainData$city)
+trainData$longitudeCut<-NULL
 
-coltoKeep<-c("latitude","longitude","num_votes","num_comments","num_views","source","tag_type","city")
-trainData<-trainData[,coltoKeep]
+#classify by cities based on lat long
+testData$longitudeCut<-trunc(testData$longitude)
+testData$city<-""
+testData$city[testData$longitudeCut=="-77"]<-"richmond"
+testData$city[testData$longitudeCut=="-72"]<-"new_haven"
+testData$city[testData$longitudeCut=="-87"]<-"chicargo"
+testData$city[testData$longitudeCut=="-122"]<-"oakland"
+testData$city<-as.factor(testData$city)
+testData$longitudeCut<-NULL
 
 trainData_map<-as.matrix(trainData[,c("longitude","latitude")])
-trainData_map<-SpatialPointsDataFrame(trainData_map,trainData[,c("num_votes","num_comments","num_views","source","tag_type","city")]
-                          ,proj4string = baseCRS)
+trainData_map<-SpatialPointsDataFrame(trainData_map,trainData,proj4string = baseCRS)
+
+testData_map<-as.matrix(testData[,c("longitude","latitude")])
+testData_map<-SpatialPointsDataFrame(testData_map,testData,proj4string = baseCRS)
 
 # #write shp file
 # writeSpatialShape(trainData_map,"trainData_map")
@@ -29,21 +40,35 @@ new_haven_PtData<-generateHex(regionPt[regionPt$region=="new_haven",])
 richmond_PtData<-generateHex(regionPt[regionPt$region=="richmond",])
 chicargo_PtData<-generateHex(regionPt[regionPt$region=="chicargo",])
 
-Hex<-rbind(oakland_PtData,new_haven_PtData,richmond_PtData,chicargo_PtData)
+baseHex<-rbind(oakland_PtData,new_haven_PtData,richmond_PtData,chicargo_PtData)
 
 # #write shp file
-# writeSpatialShape(Hex,"baseHexagon")
+# writeSpatialShape(baseHex,"baseHexagon")
 
 #point in polygon analysis, count number of trainData pts in each hex
 # remove the polygons with no data pts in them
-
-HexPt<-over(trainData_map,Hex)
+HexPt<-over(trainData_map,baseHex)
 DataTemp<-data.frame(trainData_map,HexPt)
+DataTemp$longitude.1<-NULL
+DataTemp$latitude.1<-NULL
+
+#add hexNumber to traindata
+train_wHex<-DataTemp
+
+#only keep columns that's useful for mapping
+coltoKeep<-c("latitude","longitude","num_votes","num_comments","num_views","source","tag_type","city","hexNumber")
+DataTemp<-DataTemp[,coltoKeep]
 DataTemp<-data.table(DataTemp)
 HexPt<-DataTemp[,list(count=length(num_votes),avgVote=round(mean(num_votes),2),
                       avgComment=round(mean(num_comments),2),avgView=round(mean(num_views),2)),by=hexNumber]
+Hex<-merge(baseHex,HexPt,by="hexNumber",all.x=FALSE)
 
-Hex<-merge(Hex,HexPt,by="hexNumber",all.x=FALSE)
+#add hexNumber to testdata
+HexPt<-over(testData_map,baseHex)
+DataTemp<-data.frame(testData_map,HexPt)
+DataTemp$longitude.1<-NULL
+DataTemp$latitude.1<-NULL
+test_wHex<-DataTemp
 
 # #write shp file
 # writeSpatialShape(Hex,"Hex")
@@ -80,6 +105,13 @@ HexTemp2<-data.frame(HexCount$hexNumber,HexCount$mType,HexView$mType,HexComment$
 names(HexTemp2)<-c("hexNumber","LM_count","LM_avgView","LM_avgComment","LM_avgVote")
 
 Hex_localM<-merge(Hex,HexTemp2,by="hexNumber")
+
+train_wHex<-merge(train_wHex,Hex_localM,by="hexNumber", all.x=TRUE)
+test_wHex<-merge(test_wHex,Hex_localM,by="hexNumber", all.x=TRUE)
+  
+#write new train and hex data
+write.csv(train_wHex, file = "train_wHex.csv", row.names = FALSE)
+write.csv(test_wHex, file = "test_wHex.csv", row.names = FALSE)
 
 #output to geojson, delete file if exists
 unlink("Hex_localM.geojson")
