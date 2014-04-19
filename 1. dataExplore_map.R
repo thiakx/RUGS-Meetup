@@ -1,4 +1,4 @@
-
+setwd("~/Documents/datascience SG/MusingsOfKaggler/scf_RCode/data")
 source("../baseFunctions_map.R")
 trainData<-read.csv("train.csv")
 testData<-read.csv("test.csv")

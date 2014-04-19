@@ -1,5 +1,5 @@
-
-source("../baseFunctions_model.R")
+setwd("~/Documents/datascience SG/MusingsOfKaggler/scf_RCode/data")
+source("../baseFunctions_cleanData.R")
 
 trainData<-read.csv("train_wHex.csv")
 testData<-read.csv("test_wHex.csv")
@@ -69,19 +69,12 @@ trainDataMod<-data.table(trainDataMod)
 trainData2<-trainData2[,!(names(trainData2) %in% c("summary","description"))]
 testData2<-testData2[,!(names(testData2) %in% c("summary","description"))]
 
-trainDataModChi<-trainData2
-trainDataModChi<-trainDataModChi[trainDataModChi$city=="chicargo"&trainDataModChi$source=="remote_api_created",]
-testDataModChi<-testData2[testData2$city=="chicargo"&testData2$source=="remote_api_created",]
-trainDataModChi<-data.table(trainDataModChi)
-
 #remove train data more than 3 Median Absolute Deviation away from median (outliers), 
 #dont do need -3*mad they will all result in -ve
 trainDataMod<-madRemove(trainDataMod,3)
-trainDataModChi<-madRemove(trainDataModChi,3)
 
 #convert traindataRf back to data frame
 trainDataMod<-data.frame(trainDataMod)
-trainDataModChi<-data.frame(trainDataModChi)
 
 #log view (it has large variation)
 trainDataMod$num_views<-log(trainDataMod$num_views+1)
@@ -91,12 +84,6 @@ testDataMod$tag_type<-factor(testDataMod$tag_type,levels=levels(trainDataMod$tag
 testDataMod$source<-factor(testDataMod$source,levels=levels(trainDataMod$source))
 testDataMod<-testDataMod[!is.na(testDataMod$tag_type),]
 testDataMod<-testDataMod[!is.na(testDataMod$source),]
-
-
-testDataModChi$tag_type<-factor(testDataModChi$tag_type,levels=levels(trainDataModChi$tag_type))
-testDataModChi$source<-factor(testDataModChi$source,levels=levels(trainDataModChi$source))
-testDataModChi<-testDataModChi[!is.na(testDataModChi$tag_type),]
-testDataModChi<-testDataModChi[!is.na(testDataModChi$source),]
 
 #reclassify text + split tags
 trainDataMod<-wordMine(trainDataMod,"all")
@@ -111,5 +98,3 @@ save(trainDataMod,file="trainDataMod.Rdata")
 save(testDataMod,file="testDataMod.Rdata")
 save(trainData2,file="trainData2.Rdata")
 save(testData2,file="testData2.Rdata")
-save(trainDataModChi,file="trainDataModChi.Rdata")
-save(testDataModChi,file="testDataModChi.Rdata")
