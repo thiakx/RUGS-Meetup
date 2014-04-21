@@ -1,5 +1,5 @@
 
-source("../baseFunctions_model.R")
+source("../testMod_generateEnsembleRatio/baseFunctions_model_e.R")
 
 library(foreach)
 library(doMC)
@@ -7,6 +7,10 @@ library(parallel)
 
 coreNumber<-max(detectCores(),1)
 registerDoMC(coreNumber)
+
+#tag types with 0 count in training data seems to bug the glm 
+testDataMod<-testDataMod[!testDataMod$tag_type=='other',]
+testDataMod<-testDataMod[!testDataMod$tag_type=='restaurant',]
 
 result<-foreach(1:300,.combine='cbind',.inorder=FALSE) %dopar%{ 
   trainDataModTemp<-trainDataMod[1:nrow(trainDataMod) %in% sample(nrow(trainDataMod), size=nrow(trainDataMod),replace = TRUE),]
@@ -27,7 +31,7 @@ result<-result[,c("id","num_views","num_votes","num_comments","city","tag_type",
 result[result$num_votes<1,"num_votes"]<-1
 result[result$num_comments<0,"num_comments"]<-0
 result[result$num_views<0,"num_views"]<-0
-save(result,file="resultGLM.Rdata")
+save(result,file="resultGLM_e.Rdata")
 
 #if count <sampleSize use the global median for !NA for each city 
 #we only use city here on purpose, dont further split by tag/source as the count of each category will be too small and skew the median
@@ -40,4 +44,4 @@ result2<-result2[,c("id","num_views","num_votes","num_comments","city","tag_type
 
 resultFinal<-rbind(result,result2)
 
-write.csv(resultFinal[1:4], file = "baggedGLM.csv", row.names = FALSE)
+write.csv(resultFinal[1:4], file = "baggedGLM_e.csv", row.names = FALSE)

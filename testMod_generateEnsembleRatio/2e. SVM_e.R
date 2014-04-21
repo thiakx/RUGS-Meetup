@@ -1,10 +1,10 @@
 
-source("../baseFunctions_model.R")
+source("../testMod_generateEnsembleRatio/baseFunctions_model_e.R")
 
 library(e1071)
 
 result<-svmModel(trainDataMod,testDataMod)
-save(result,file="resultSVM.Rdata")
+save(result,file="resultSVM_e.Rdata")
 
 #if count <sampleSize use the global median for !NA for each city 
 #we only use city here on purpose, dont further split by tag/source as the count of each category will be too small and skew the median
@@ -17,4 +17,4 @@ result2<-result2[,c("id","num_views","num_votes","num_comments","city","tag_type
 
 resultFinal<-rbind(result,result2)
 # submit prediction
-write.csv(resultFinal[1:4], file = "svm.csv", row.names = FALSE)
+write.csv(resultFinal[1:4], file = "svm_e.csv", row.names = FALSE)

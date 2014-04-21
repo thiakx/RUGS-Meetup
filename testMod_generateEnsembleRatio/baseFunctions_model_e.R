@@ -2,11 +2,11 @@ library(stringr)
 library(caret)
 library(data.table)
 
-#load cleaned data
-load("trainDataMod.Rdata")
-load("testDataMod.Rdata")
-load("trainData2.Rdata")
-load("testData2.Rdata")
+#load ensemble data
+load("testDataEnsemble.Rdata")
+load("testDataModEnsemble.Rdata")
+load("trainDataEnsemble.Rdata")
+load("trainDataModEnsemble.Rdata")
 
 #only consider local moran and hex average if count of hex >30
 trainDataMod$LM_avgView[trainDataMod$count<30]<-NA

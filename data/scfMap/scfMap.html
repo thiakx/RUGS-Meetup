@@ -49,16 +49,9 @@
 	<div id="map"></div>
 	<script type="text/javascript">
 
-		function onEachFeature(feature, layer) {
+					function onEachFeature(feature, layer) {
 			if (feature.properties && feature.properties.hexNumber && 
-				feature.properties.count && 
-				feature.properties.avgVote && 
-				feature.properties.avgComment && 
-				feature.properties.avgView && 
-				feature.properties.LM_count && 
-				feature.properties.LM_avgView && 
-				feature.properties.LM_avgComment && 
-				feature.properties.LM_avgVote) {
+				feature.properties.count) {
 				layer.bindPopup("<table>" +
 					"<tr><td>hexNumber</td><td>" + feature.properties.hexNumber + "</td></tr>" +
 					"<tr class='evenrowcol'><td>count</td><td>" + feature.properties.count + "</td></tr>" +
@@ -73,7 +66,7 @@
 				);
 			}
 		};
-		
+
 		//filler data to initiate the layer objects below
 		var emptyData = [{}];
 		

@@ -1,4 +1,4 @@
-setwd("~/Documents/datascience SG/MusingsOfKaggler/scf_RCode/data")
+
 source("../baseFunctions_model.R")
 
 library(randomForest)
@@ -10,7 +10,7 @@ coreNumber<-max(detectCores(),1)
 registerDoMC(coreNumber)
 
 set.seed(2291033)
-result<-rfModel(trainDataMod,testDataMod,1500,coreNumber)
+result<-rfModel(trainDataMod,testDataMod,1000,coreNumber)
 save(result,file="resultRF.Rdata")
 
 #if count <sampleSize use the global median for !NA for each city 

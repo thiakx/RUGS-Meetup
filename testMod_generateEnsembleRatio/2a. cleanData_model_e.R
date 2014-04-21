@@ -2,7 +2,19 @@
 source("../baseFunctions_cleanData.R")
 
 trainData<-read.csv("train_wHex.csv")
-testData<-read.csv("test_wHex.csv")
+
+#use apr 2014 data as ensemble test data
+# idNo<-trainData[sample(nrow(trainData), size=0.2*nrow(trainData),replace = FALSE),"id"]
+trainData$month<-month(trainData$created_time)
+trainData$year<-year(trainData$created_time)
+idNo<-trainData[trainData$year==2013&trainData$month==4,"id"]
+
+testData<-trainData[trainData$id %in% idNo,]
+trainData<-trainData[!trainData$id %in% idNo,]
+#save the answers
+testDataAns<-testData[,c("id","num_votes","num_comments","num_views")]
+#remove votes,comments,views cols from test data
+testData<-subset(testData, select=-c(num_votes,num_comments,num_views))
 
 trainData2<-trainData[,!(names(trainData) %in% c("latitude","longitude"))]
 
@@ -27,9 +39,6 @@ testData$source<-as.factor(testData$source)
 trainData2$num_views<-as.numeric(trainData2$num_views)
 trainData2$num_votes<-as.numeric(trainData2$num_votes)
 trainData2$num_comments<-as.numeric(trainData2$num_comments)
-
-trainData2$month<-month(trainData2$created_time)
-trainData2$year<-year(trainData2$created_time)
 
 #remove first 10 month 2012 data as they have higher d from 2013 Apr
 #remove march 2013 as it has high d as well.
@@ -95,7 +104,8 @@ trainDataMod<-trainDataMod[,!(names(trainDataMod) %in% c("summary","description"
 testDataMod<-testDataMod[,!(names(testDataMod) %in% c("summary","description"))]
 
 #save the data
-save(trainDataMod,file="trainDataMod.Rdata")
-save(testDataMod,file="testDataMod.Rdata")
-save(trainData2,file="trainData2.Rdata")
-save(testData2,file="testData2.Rdata")
+save(testData2, file = "testDataEnsemble.Rdata")
+save(testDataMod, file = "testDataModEnsemble.Rdata")
+save(testDataAns, file = "testDataEnsembleAns.Rdata")
+save(trainData2, file = "trainDataEnsemble.Rdata")
+save(trainDataMod, file = "trainDataModEnsemble.Rdata")

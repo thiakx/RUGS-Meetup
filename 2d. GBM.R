@@ -1,4 +1,4 @@
-setwd("~/Documents/datascience SG/MusingsOfKaggler/scf_RCode/data")
+
 source("../baseFunctions_model.R")
 
 library(gbm)

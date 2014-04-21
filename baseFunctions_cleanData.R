@@ -11,6 +11,7 @@ year<-function(dataIn){
 }
 
 #requires data.table as input
+#dont do need -3*mad they will all result in -ve
 madRemove<-function(dataIn,cutOff){
   madSummary<-dataIn[,list(num_views=median(num_views)+cutOff*mad(num_views),
                                 num_votes=median(num_votes)+cutOff*mad(num_votes),
