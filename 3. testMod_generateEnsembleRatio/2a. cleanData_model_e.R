@@ -4,7 +4,6 @@ source("../baseFunctions_cleanData.R")
 trainData<-read.csv("train_wHex.csv")
 
 #use apr 2014 data as ensemble test data
-# idNo<-trainData[sample(nrow(trainData), size=0.2*nrow(trainData),replace = FALSE),"id"]
 trainData$month<-month(trainData$created_time)
 trainData$year<-year(trainData$created_time)
 idNo<-trainData[trainData$year==2013&trainData$month==4,"id"]
@@ -43,8 +42,8 @@ trainData2$num_comments<-as.numeric(trainData2$num_comments)
 #remove first 10 month 2012 data as they have higher d from 2013 Apr
 #remove march 2013 as it has high d as well.
 #d is like the distance of difference, smaller d = the two data sets are closer
-ksTest<-ks.test(trainData2$num_views[trainData2$month==4&trainData2$year==2013],
-                trainData2$num_views[trainData2$month==9&trainData2$year==2012])
+# ksTest<-ks.test(trainData2$num_views[trainData2$month==4&trainData2$year==2013],
+#                 trainData2$num_views[trainData2$month==9&trainData2$year==2012])
 trainData2<-trainData2[trainData2$month==11|trainData2$month==12|trainData2$year==2013,]
 trainData2<-trainData2[trainData2$month!=3,]
 
@@ -59,16 +58,16 @@ trainData2<-remapAPI(trainData2)
 testData2<-testData[,!(names(testData) %in% c("latitude","longitude","created_time"))]
 testData2<-remapAPI(testData2)
 
-#chicargo remote_api_created is one of the kind weird and should be modelled seperately
-ksTest_city<- ks.test(trainData2$num_views[trainData2$city=="oakland"],
-              trainData2$num_views[trainData2$city=="chicargo"&trainData2$source!="remote_api_created"])
-
-ksTest_city2<-ks.test(trainData2$num_views[trainData2$city=="chicargo"],
-              trainData2$num_views[trainData2$city=="chicargo"&trainData2$source!="remote_api_created"])
-
-#richmond, new_haven have d=0 which is strange
-ksTest_city3<-ks.test(trainData2$num_views[trainData2$city=="new_haven"],
-        trainData2$num_views[trainData2$city=="new_haven"&trainData2$source!="remote_api_created"])
+# #chicargo remote_api_created is one of the kind weird and should be modelled seperately
+# ksTest_city<- ks.test(trainData2$num_views[trainData2$city=="oakland"],
+#                       trainData2$num_views[trainData2$city=="chicargo"&trainData2$source!="remote_api_created"])
+# 
+# ksTest_city2<-ks.test(trainData2$num_views[trainData2$city=="chicargo"],
+#                       trainData2$num_views[trainData2$city=="chicargo"&trainData2$source!="remote_api_created"])
+# 
+# #richmond, new_haven have d=0 which is strange
+# ksTest_city3<-ks.test(trainData2$num_views[trainData2$city=="new_haven"],
+#                       trainData2$num_views[trainData2$city=="new_haven"&trainData2$source!="remote_api_created"])
 
 trainDataMod<-trainData2
 trainDataMod<-trainDataMod[!(trainDataMod$city=="chicargo"&trainDataMod$source=="remote_api_created"),]

@@ -1,4 +1,5 @@
 
+#run the scripts in testMod_generateEnsembleRatio to generate the ensemble ratio! (eRatio)
 load("eRatioList.RData")
 
 rfAns<-read.csv("randomForest.csv")
@@ -23,8 +24,8 @@ ensembleAns$num_comments<-eRatio_num_comments[1]*rfAns$num_comments+eRatio_num_c
 
 #votes cannot be less than 1
 ensembleAns[ensembleAns$num_votes<1,"num_votes"]<-1
-ensembleAns[ensembleAns$num_comments<0,"num_comments"]<-0
-ensembleAns[ensembleAns$num_views<0,"num_views"]<-0
+ensembleAns[ensembleAns$num_comments<0.05,"num_comments"]<-0
+ensembleAns[ensembleAns$num_views<0.05,"num_views"]<-0
 
 # submit prediction
 write.csv(ensembleAns, file = "ensemble.csv", row.names = FALSE)

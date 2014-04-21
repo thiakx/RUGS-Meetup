@@ -16,5 +16,5 @@ result2<-merge(testData2,tagSummary,by=c("city"))
 result2<-result2[,c("id","num_views","num_votes","num_comments","city","tag_type","source")]
 
 resultFinal<-rbind(result,result2)
-# submit prediction
+
 write.csv(resultFinal[1:4], file = "gbm_e.csv", row.names = FALSE)

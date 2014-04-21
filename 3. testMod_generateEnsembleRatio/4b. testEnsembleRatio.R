@@ -44,8 +44,8 @@ ensembleAns$num_comments<-eRatio_num_comments[1]*rfAns$num_comments+eRatio_num_c
 
 #<0.5 = 0, votes cannot be less than 1
 ensembleAns[ensembleAns$num_votes<1,"num_votes"]<-1
-ensembleAns[ensembleAns$num_comments<0.5,"num_comments"]<-0
-ensembleAns[ensembleAns$num_views<0.5,"num_views"]<-0
+ensembleAns[ensembleAns$num_comments<0.05,"num_comments"]<-0
+ensembleAns[ensembleAns$num_views<0.05,"num_views"]<-0
 
 ensembleAns<-conCatCol(ensembleAns)
 testDataAns<-conCatCol(testDataAns)
