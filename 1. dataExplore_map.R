@@ -1,4 +1,4 @@
-
+#I will setwd("/MY_Working_Directory/data") where the kaggle train/test data are placed
 source("../baseFunctions_map.R")
 trainData<-read.csv("train.csv")
 testData<-read.csv("test.csv")

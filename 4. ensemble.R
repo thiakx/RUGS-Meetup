@@ -1,4 +1,4 @@
-
+#I will setwd("/MY_Working_Directory/data") where the kaggle train/test data are placed
 #run the scripts in testMod_generateEnsembleRatio to generate the ensemble ratio! (eRatio)
 load("eRatioList.RData")
 

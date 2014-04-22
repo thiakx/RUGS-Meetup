@@ -1,4 +1,4 @@
-
+#I will setwd("/MY_Working_Directory/data") where the kaggle train/test data are placed
 source("../baseFunctions_model.R")
 
 library(gbm)
