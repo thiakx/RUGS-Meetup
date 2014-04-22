@@ -1,5 +1,5 @@
 #I will setwd("/MY_Working_Directory/data") where the kaggle train/test data are placed
-source("../testMod_generateEnsembleRatio/baseFunctions_model_e.R")
+source("../3. testMod_generateEnsembleRatio/baseFunctions_model_e.R")
 
 library(gbm)
 
