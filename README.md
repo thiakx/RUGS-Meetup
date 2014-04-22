@@ -1,4 +1,4 @@
-MOK-RUGs-Presentation
+RUGS-Meetup
 =====================
 
 R code for my presentation at R User Group Singapore. 
