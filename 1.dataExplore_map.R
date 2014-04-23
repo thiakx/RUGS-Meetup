@@ -3,6 +3,9 @@ source("../baseFunctions_map.R")
 trainData<-read.csv("train.csv")
 testData<-read.csv("test.csv")
 
+#load in the boundry box for each city
+regionPt<-read.csv("../leafletMaps/regionPoints.csv")
+
 #classify by cities based on lat long
 trainData$longitudeCut<-trunc(trainData$longitude)
 trainData$city<-""
@@ -31,9 +34,6 @@ testData_map<-SpatialPointsDataFrame(testData_map,testData,proj4string = baseCRS
 
 # #write shp file
 # writeSpatialShape(trainData_map,"trainData_map")
-
-#generate hexagonal grid by region
-regionPt<-read.csv("regionPoints.csv")
 
 oakland_PtData<-generateHex(regionPt[regionPt$region=="oakland",])
 new_haven_PtData<-generateHex(regionPt[regionPt$region=="new_haven",])
