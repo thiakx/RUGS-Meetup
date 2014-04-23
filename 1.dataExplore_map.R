@@ -89,8 +89,8 @@ q.style <- styleGrad(prop=hexVar, breaks=breakInt,
                      fill.alpha=0.7, rad=8)
 
 # create map
-unlink("scf",recursive = TRUE)
-q.map <- leaflet(data="Hex.geojson", title="scf", center=c(37.8044, -122.2708), zoom=12,
+unlink("../leafletMaps/scf",recursive = TRUE)
+q.map <- leaflet(data="Hex.geojson", dest="../leafletMaps",title="scf", center=c(37.8044, -122.2708), zoom=12,
                  base.map="osm", style=q.style, popup="*")
 
 #localMoran's I (beta)
@@ -108,7 +108,7 @@ Hex_localM<-merge(Hex,HexTemp2,by="hexNumber")
 
 train_wHex<-merge(train_wHex,Hex_localM,by="hexNumber", all.x=TRUE)
 test_wHex<-merge(test_wHex,Hex_localM,by="hexNumber", all.x=TRUE)
-  
+
 #write new train and hex data
 write.csv(train_wHex, file = "train_wHex.csv", row.names = FALSE)
 write.csv(test_wHex, file = "test_wHex.csv", row.names = FALSE)
@@ -123,6 +123,6 @@ q.styleLocalM <- styleCat(prop="LM_avgView", c("None","LH","LL","HL","HH"),
                           fill.alpha=0.7, rad=8)
 
 # create map
-unlink("scf_localM",recursive = TRUE)
-q.map <- leaflet(data="Hex_localM.geojson", title="scf localM", center=c(37.8044, -122.2708), zoom=12,
-                  base.map="osm", style=q.styleLocalM, popup="*")
+unlink("../leafletMaps/scfLocalM",recursive = TRUE)
+q.map <- leaflet(data="Hex_localM.geojson", dest="../leafletMaps",title="scfLocalM", center=c(37.8044, -122.2708), zoom=12,
+                 base.map="osm", style=q.styleLocalM, popup="*")

@@ -1,0 +1,40 @@
+<html>
+<head>
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+</head>
+
+<body>
+<div id="map" style="height: 100%"></div>
+
+<script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+
+<script>
+
+
+var map = L.map('map', {
+	center: new L.LatLng(37.8044, -122.2708),
+	zoom: 13,
+});	
+
+L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	attribution: '&copy; <a href="http://openstreetmap.org/copyright", target="_blank">OpenStreetMap contributors</a>'
+	}).addTo(map);
+		
+
+var popup = L.popup()
+    .setLatLng([37.8044, -122.2708])
+    .setContent("Click anywhere to obtain the Lat / Long Coordinates")
+    .openOn(map);
+
+function onMapClick(e) {
+    popup
+        .setLatLng(e.latlng)
+        .setContent("You clicked the map at " + e.latlng.toString())
+        .openOn(map);
+}
+
+map.on('click', onMapClick);
+
+</script>
+</body>
+</html>
