@@ -1,7 +1,7 @@
 RUGS-Meetup
 =====================
 
-R code for my presentation at R User Group Singapore. 
+R code for my presentation at R User Group Singapore. Code includes: Interactive visualization via leaflet, geospatial clustering via local Moran's I, feature creation, text categorization via splitTag techniques and ensemble modeling. 
 
 Please download the train & test data into the /data folder. Get them from See-Click-Fix Kaggle Competition: http://www.kaggle.com/c/see-click-predict-fix/data
 
@@ -11,3 +11,7 @@ Start by running the code in their sequence 0,1,2a,2b...take note that step 3 is
 
 To chrome allow file access for jquery:
 http://stackoverflow.com/questions/4208530/xmlhttprequest-origin-null-is-not-allowed-access-control-access-allow-for-file
+
+Slides: http://www.slideshare.net/KaiX/musings-of-kaggler
+Interactive map demo: http://www.thiakx.com/misc/playground/scfMap/scfMap.html
+
