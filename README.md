@@ -3,7 +3,7 @@ RUGS-Meetup
 
 R code for my presentation at R User Group Singapore. 
 
-Please download the train & test data into the /data folder. Get them from See-Click-Fix Kaggle Competition: http://www.kaggle.com/c/see-click-predict-fix
+Please download the train & test data into the /data folder. Get them from See-Click-Fix Kaggle Competition: http://www.kaggle.com/c/see-click-predict-fix/data
 
 Start by running the code in their sequence 0,1,2a,2b...take note that step 3 is in a folder "3.testMod_generateEnsembleRatio" where we will be running models on a subset of training data to obtain the ensemble ratio for step 4 ensemble
 
